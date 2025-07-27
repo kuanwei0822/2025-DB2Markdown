@@ -37,3 +37,8 @@ properties 設定檔使用帶入環境變數作為參數，例如：
 
 - ${DB_USERNAME} 從環境變數中讀取 `DB_USERNAME` 的值。
 - ${DB_PASSWORD} 從環境變數中讀取 `DB_PASSWORD` 的值。
+
+### Log4j2 設定
+
+- 排除 SpringBoot 預設的 Logback，改用 Log4j2。
+- SpringBoot 使用 info；內部程式邏輯使用 debug。
