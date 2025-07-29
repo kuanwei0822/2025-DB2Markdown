@@ -1,9 +1,13 @@
 # 2025-DB2Markdown
 連線 PostgreSQL 即可匯出 DB 文件
 
-
-
 ## 開發筆記
+
+### SonarQube 手動檢查機制
+
+- 在 IDE 安裝 SonarQube 工具。
+- 在每次 Commit 之前對專案落實 SonarQube 檢查。
+- 確保程式碼的品質、及時修正弱點。
 
 ### Profile 設定
 
@@ -31,7 +35,7 @@
   dev,postgresql
   ```
 
-### properties 動態參數
+#### properties 動態參數
 
 properties 設定檔使用帶入環境變數作為參數，例如：
 
@@ -42,3 +46,8 @@ properties 設定檔使用帶入環境變數作為參數，例如：
 
 - 排除 SpringBoot 預設的 Logback，改用 Log4j2。
 - SpringBoot 使用 info；內部程式邏輯使用 debug。
+
+### 連線驗證器 Validator
+
+- 在 SpringBoot 啟動時，會自動驗證連線設定是否正確。
+- 為保持開發彈性，不會因為 DB 連線失敗而啟動失敗，但會印出 Error Log。
