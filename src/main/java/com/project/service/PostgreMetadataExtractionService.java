@@ -1,7 +1,7 @@
 package com.project.service;
 
 import com.project.extractor.MetadataExtractor;
-import com.project.extractor.model.TableMeta;
+import com.project.extractor.model.PostgreTableMeta;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,15 +20,15 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MetadataExtractionService {
+public class PostgreMetadataExtractionService {
 
-    private final MetadataExtractor metadataExtractor;
+    private final MetadataExtractor<PostgreTableMeta> metadataExtractor;
     private final DataSource dataSource;
 
     /**
      * 抽取資料庫中所有表格的 Metadata。
      */
-    public List<TableMeta> extractTables() {
+    public List<PostgreTableMeta> extractTables() {
         try (Connection conn = dataSource.getConnection()) {
             return metadataExtractor.extractMetadata(conn);
         } catch (SQLException ex) {
