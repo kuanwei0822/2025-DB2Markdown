@@ -81,7 +81,7 @@ public class PostgreSqlMetadataExtractor implements MetadataExtractor<PostgreTab
                 col.setColumnName(rs.getString("COLUMN_NAME"));
                 col.setDataType(rs.getString("TYPE_NAME"));
                 col.setColumnSize(rs.getInt("COLUMN_SIZE"));
-                col.setNullable(rs.getInt("NULLABLE") == DatabaseMetaData.columnNullable);
+                col.setNullable(PostgreTableMeta.ColumnMeta.Nullable.from(rs.getInt("NULLABLE")));
                 col.setDefaultValue(rs.getString("COLUMN_DEF"));
                 col.setRemarks(rs.getString("REMARKS"));
                 col.setPrimaryKey(primaryKeys.contains(col.getColumnName()));

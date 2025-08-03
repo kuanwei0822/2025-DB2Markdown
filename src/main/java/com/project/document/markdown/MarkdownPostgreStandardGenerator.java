@@ -41,7 +41,7 @@ public class MarkdownPostgreStandardGenerator {
                         .append(column.getDataType()).append(" | ")
                         .append(column.getColumnSize() == null ? "" : column.getColumnSize()).append(" | ")
                         .append(column.getDefaultValue() == null ? "" : column.getDefaultValue()).append(" | ")
-                        .append(column.getNullable() != null && column.getNullable() ? "YES" : "NO").append(" | ")
+                        .append(column.getNullable().getDisplayName()).append(" | ")
                         .append(column.isPrimaryKey() ? "YES" : "").append(" | ")
                         .append(column.getRemarks() == null ? "" : column.getRemarks())
                         .append(" |\n");
