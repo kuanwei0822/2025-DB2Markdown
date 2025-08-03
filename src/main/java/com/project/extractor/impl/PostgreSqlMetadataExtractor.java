@@ -127,20 +127,6 @@ public class PostgreSqlMetadataExtractor implements MetadataExtractor<PostgreTab
 
     /**
      * 獲取指定 Table 的所有約束條件資訊。
-     * 目前 PostgreSQL 不支援直接獲取約束條件，這裡可以根據需要擴展。
-     */
-    private String getForeignKeyRule(short rule) {
-        return switch (rule) {
-            case DatabaseMetaData.importedKeyCascade -> "CASCADE";
-            case DatabaseMetaData.importedKeySetNull -> "SET NULL";
-            case DatabaseMetaData.importedKeyRestrict -> "RESTRICT";
-            case DatabaseMetaData.importedKeyNoAction -> "NO ACTION";
-            default -> "UNKNOWN";
-        };
-    }
-
-    /**
-     * 獲取指定 Table 的所有約束條件資訊。
      * 包含約束名稱、類型、表達式等。
      */
     private List<PostgreTableMeta.ConstraintMeta> getConstraints(Connection conn, String schema, String tableName) throws SQLException {
@@ -160,7 +146,7 @@ public class PostgreSqlMetadataExtractor implements MetadataExtractor<PostgreTab
                 while (rs.next()) {
                     PostgreTableMeta.ConstraintMeta constraint = new PostgreTableMeta.ConstraintMeta();
                     constraint.setConstraintName(rs.getString("conname"));
-                    constraint.setConstraintType(mapConstraintType(rs.getString("contype")));
+                    constraint.setConstraintType(PostgreTableMeta.ConstraintMeta.ConstraintType.from(rs.getString("contype")));
                     constraint.setCheckClause(rs.getString("definition")); // 包含表達式
                     constraints.add(constraint);
                 }
@@ -168,24 +154,4 @@ public class PostgreSqlMetadataExtractor implements MetadataExtractor<PostgreTab
         }
         return constraints;
     }
-
-    /**
-     * 將 PostgreSQL 的約束類型映射為更易讀的格式。
-     * - p: PRIMARY KEY
-     * - u: UNIQUE
-     * - f: FOREIGN KEY
-     * - c: CHECK
-     */
-    private String mapConstraintType(String contype) {
-        return switch (contype) {
-            case "p" -> "PRIMARY KEY";
-            case "u" -> "UNIQUE";
-            case "f" -> "FOREIGN KEY";
-            case "c" -> "CHECK";
-            default -> "UNKNOWN";
-        };
-    }
-
-
-
 }

@@ -51,22 +51,23 @@ public class MarkdownPostgreStandardGenerator {
             sb.append("\n## Constraints\n");
 
             List<PostgreTableMeta.ConstraintMeta> uniques = table.getConstraints().stream()
-                    .filter(c -> "UNIQUE".equalsIgnoreCase(c.getConstraintType()))
+                    .filter(c -> c.getConstraintType() == PostgreTableMeta.ConstraintMeta.ConstraintType.UNIQUE)
                     .collect(Collectors.toList());
 
             List<PostgreTableMeta.ConstraintMeta> checks = table.getConstraints().stream()
-                    .filter(c -> "CHECK".equalsIgnoreCase(c.getConstraintType()))
+                    .filter(c -> c.getConstraintType() == PostgreTableMeta.ConstraintMeta.ConstraintType.CHECK)
                     .collect(Collectors.toList());
 
+
             // TODO 需要從源頭 MetadataExtractor 修正 uc.getColumnNames() 為 null 問題。
-//            if (!uniques.isEmpty()) {
-//                sb.append("\n### UNIQUE\n");
-//                for (PostgreTableMeta.ConstraintMeta uc : uniques) {
-//                    sb.append("- ").append(uc.getConstraintName()).append(": (")
-//                            .append(String.join(", ", uc.getColumnNames()))
-//                            .append(")\n");
-//                }
-//            }
+            if (!uniques.isEmpty()) {
+                sb.append("\n### UNIQUE\n");
+                for (PostgreTableMeta.ConstraintMeta uc : uniques) {
+                    sb.append("- ").append(uc.getConstraintName()).append(": (")
+                            .append(String.join(", ", uc.getColumnNames() == null ? List.of() : uc.getColumnNames()))
+                            .append(")\n");
+                }
+            }
 
             if (!checks.isEmpty()) {
                 sb.append("\n### CHECK\n");

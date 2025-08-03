@@ -75,7 +75,7 @@ public class PostgreTableMeta implements ITableMeta {
             private final int value;
 
             @Getter
-            private final String displayName;
+            private final String displayName; // 輸出用（JSON/Markdown）
 
             // 根據 JDBC 回傳的 code 取得對應的 Nullable Enum
             public static Nullable from(int code) {
@@ -125,7 +125,7 @@ public class PostgreTableMeta implements ITableMeta {
             private final int value;
 
             @Getter
-            private final String displayName;
+            private final String displayName; // 輸出用（JSON/Markdown）
 
             public static ReferentialRule from(short code) {
                 return switch (code) {
@@ -146,10 +146,36 @@ public class PostgreTableMeta implements ITableMeta {
         // 約束條件名稱
         private String constraintName;
         // 約束條件類型 PRIMARY KEY, FOREIGN KEY, CHECK, UNIQUE...
-        private String constraintType;
+        private ConstraintType constraintType;
         // 涉及的欄位名稱（可能是多欄）
         private List<String> columnNames;
         // 若為 FOREIGN KEY，這裡為參照的表格名稱
         private String checkClause;
+
+        @AllArgsConstructor
+        public enum ConstraintType {
+            PRIMARY_KEY("p", "PRIMARY KEY"),
+            FOREIGN_KEY("f", "FOREIGN KEY"),
+            UNIQUE("u", "UNIQUE"),
+            CHECK("c", "CHECK"),
+            EXCLUDE("EXCLUDE", "EXCLUDE"),
+            NOT_NULL("NOT_NULL", "NOT NULL"),
+            UNKNOWN("UNKNOWN", "UNKNOWN");
+
+            @Getter
+            private final String value;
+
+            @Getter
+            private final String displayName; // 輸出用（JSON/Markdown）
+
+            public static ConstraintType from(String contype) {
+                if (contype == null) return UNKNOWN;
+                return Arrays.stream(values())
+                        .filter(ct -> ct.value.equalsIgnoreCase(contype.trim()))
+                        .findFirst()
+                        .orElse(UNKNOWN);
+
+            }
+        }
     }
 }
