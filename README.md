@@ -51,3 +51,12 @@ properties 設定檔使用帶入環境變數作為參數，例如：
 
 - 在 SpringBoot 啟動時，會自動驗證連線設定是否正確。
 - 為保持開發彈性，不會因為 DB 連線失敗而啟動失敗，但會印出 Error Log。
+
+### 核心 Metadata 載體物件 PostgreTableMeta
+
+- 這是核心的 Metadata 載體物件，包含了 PostgreSQL 資料表的結構資訊。
+- 所有的 Metadata 輸出都會基於這個物件進行處理。
+
+### Markdown 產生器 MarkdownGenerator
+
+- 負責將 PostgreTableMeta 轉換為 Markdown 格式。
