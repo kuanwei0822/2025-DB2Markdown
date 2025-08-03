@@ -21,7 +21,10 @@ public class PostgreMetadataController {
 
     private final PostgreMetadataExtractionService metadataService;
 
-    @RequestMapping("/tables")
+    /**
+     * 獲取 PostgreSQL 資料庫中的所有表格 Metadata (原始資料)。
+     */
+    @RequestMapping("/original/tables")
     public ResponseEntity<List<PostgreTableMeta>> getTables() {
         List<PostgreTableMeta> tables = metadataService.extractTables();
         return ResponseEntity.ok(tables);
