@@ -85,8 +85,8 @@ public class MarkdownPostgreStandardGenerator {
                             .append(": ").append(fk.getColumnName())
                             .append(" → ").append(fk.getReferencedTable())
                             .append(".").append(fk.getReferencedColumn())
-                            .append(" (ON DELETE ").append(fk.getDeleteRule())
-                            .append(", ON UPDATE ").append(fk.getUpdateRule()).append(")\n");
+                            .append(" (ON DELETE ").append(fk.getDeleteRule().getDisplayName())
+                            .append(", ON UPDATE ").append(fk.getUpdateRule().getDisplayName()).append(")\n");
                 }
             }
 

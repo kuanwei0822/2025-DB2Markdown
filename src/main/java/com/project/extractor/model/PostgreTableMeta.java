@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import org.springframework.context.annotation.Profile;
 
+import java.sql.DatabaseMetaData;
 import java.util.Arrays;
 import java.util.List;
 
@@ -97,10 +98,46 @@ public class PostgreTableMeta implements ITableMeta {
         private String referencedTable;
         // 參照的欄位名稱
         private String referencedColumn;
-        // ON UPDATE 和 ON DELETE 的規則
-        private String updateRule;
+        // ON UPDATE 的規則
+        private ReferentialRule updateRule;
         // ON DELETE 的規則
-        private String deleteRule;
+        private ReferentialRule deleteRule;
+
+        /**
+         * 參照 PostgreSQL 規則的 Enum 類型。
+         * 適用 於 Foreign Key 的 ON UPDATE 和 ON DELETE 規則。
+         * - CASCADE: 連鎖更新或刪除
+         * - SET_NULL: 設為 NULL
+         * - RESTRICT: 限制更新或刪除
+         * - NO_ACTION: 不做任何動作
+         * - UNKNOWN: 未知其他規則
+         */
+        @AllArgsConstructor
+        public enum ReferentialRule {
+            CASCADE(0, "CASCADE"),
+            RESTRICT(1, "RESTRICT"),
+            SET_NULL(2, "SET NULL"),
+            NO_ACTION(3, "NO ACTION"),
+            SET_DEFAULT(4, "SET DEFAULT"),
+            UNKNOWN(-1,"UNKNOWN");
+
+            @Getter
+            private final int value;
+
+            @Getter
+            private final String displayName;
+
+            public static ReferentialRule from(short code) {
+                return switch (code) {
+                    case DatabaseMetaData.importedKeyCascade -> CASCADE;
+                    case DatabaseMetaData.importedKeyRestrict -> RESTRICT;
+                    case DatabaseMetaData.importedKeySetNull -> SET_NULL;
+                    case DatabaseMetaData.importedKeyNoAction -> NO_ACTION;
+                    case DatabaseMetaData.importedKeySetDefault -> SET_DEFAULT;
+                    default -> UNKNOWN;
+                };
+            }
+        }
     }
 
     // 約束條件的 MetaData

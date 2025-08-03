@@ -117,8 +117,8 @@ public class PostgreSqlMetadataExtractor implements MetadataExtractor<PostgreTab
                 fk.setColumnName(rs.getString("FKCOLUMN_NAME"));
                 fk.setReferencedTable(rs.getString("PKTABLE_NAME"));
                 fk.setReferencedColumn(rs.getString("PKCOLUMN_NAME"));
-                fk.setUpdateRule(getForeignKeyRule(rs.getShort("UPDATE_RULE")));
-                fk.setDeleteRule(getForeignKeyRule(rs.getShort("DELETE_RULE")));
+                fk.setUpdateRule(PostgreTableMeta.ForeignKeyMeta.ReferentialRule.from(rs.getShort("UPDATE_RULE")));
+                fk.setDeleteRule(PostgreTableMeta.ForeignKeyMeta.ReferentialRule.from(rs.getShort("DELETE_RULE")));
                 foreignKeys.add(fk);
             }
         }
