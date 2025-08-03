@@ -4,6 +4,7 @@ import com.project.extractor.MetadataExtractor;
 import com.project.extractor.model.PostgreTableMeta;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
@@ -20,6 +21,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Profile("postgresql")
 public class PostgreMetadataExtractionService {
 
     private final MetadataExtractor<PostgreTableMeta> metadataExtractor;
